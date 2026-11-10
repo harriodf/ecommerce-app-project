@@ -20,11 +20,11 @@ jobs:
       list: ${{ steps.list.outputs.list }}
     steps:
       - id: list
-        run: echo 'list=["chatbot"]' >> "$GITHUB_OUTPUT"
-        All: ["accounting","ad","agent","cart","chatbot","checkout","currency","email",
+        run: |
+          echo 'list=["accounting","ad","agent","cart","chatbot","checkout","currency","email",
               "flagd-ui","fraud-detection","frontend","frontend-proxy","image-provider",
               "kafka","load-generator","mcp","opamp-server","opensearch","payment",
-              "product-catalog","quote","recommendation","shipping","telemetry-docs"]
+              "product-catalog","quote","recommendation","shipping","telemetry-docs"]' >> "$GITHUB_OUTPUT"
 
   build-and-push:
     name: Build ${{ matrix.service }}
@@ -35,7 +35,7 @@ jobs:
       matrix:
         service: ${{ fromJSON(needs.services.outputs.list) }}
     env:
-      IMAGE: ecomerce/${{ matrix.service }} # ECR repository name
+      IMAGE: ecommerce/${{ matrix.service }} # ECR repository name
       # Every Dockerfile is at src/<service>/Dockerfile, except cart's
       DOCKERFILE: ${{ matrix.service == 'cart' && 'src/cart/src/Dockerfile' || format('src/{0}/Dockerfile', matrix.service) }}
     steps:
